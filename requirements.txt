@@ -11,3 +11,4 @@ tensorflow
 optuna
 joblib
 scikeras
+scikeras[tensorflow]
