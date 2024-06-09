@@ -172,7 +172,7 @@ y_pred_train = pipeline_regression.predict(X_train)
 y_pred_test = pipeline_regression.predict(X_test)
 show_metrics_regresion(y_train_regresion, y_pred_train, "Métricas del conjunto de entrenamiento:", True)
 show_metrics_regresion(y_test_regresion, y_pred_test, "Métricas del conjunto de prueba:", True)
-joblib.dump(pipeline_regression, 'weather_regression.joblib')
+joblib.dump(pipeline_regression, 'weather_regression.pkl')
 
 best_params = {'hidden_layer_sizes': (100,), 'activation': 'relu', 'solver': 'adam', 'alpha': 0.005958432842192192,
                'learning_rate_init': 0.0001422171191037891}
@@ -198,7 +198,7 @@ test_recall = recall_score(y_test_clasificacion, y_test_pred, average='weighted'
 print("Precisión en el conjunto de prueba:", test_accuracy)
 print("Pérdida en el conjunto de prueba:", test_loss)
 print("Recall en el conjunto de prueba:", test_recall)
-joblib.dump(pipeline_clasificacion, 'weather_clasificacion.joblib')
+joblib.dump(pipeline_clasificacion, 'weather_clasificacion.pkl')
 print(X_train.columns)
 
 print("Columnas del conjunto de datos de prueba:")
