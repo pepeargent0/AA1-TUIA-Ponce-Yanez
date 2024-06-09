@@ -5,9 +5,8 @@ import pandas as pd
 
 # Función para verificar las credenciales
 def authenticate(username, password):
-    # Aquí deberías realizar la autenticación, por ejemplo, comparando con credenciales almacenadas
-    # En este ejemplo, solo se verifica que el usuario y la contraseña no estén vacíos
-    if username != "" and password != "":
+    # Verificar credenciales
+    if username == "admin" and password == "admin":
         return True
     else:
         return False
@@ -47,6 +46,21 @@ def main():
     # Título de la aplicación
     st.title('Predicción del clima')
 
+    # Obtener la ruta de la página actual
+    url = st.experimental_get_query_params()
+    url_path = url['page'][0] if 'page' in url else 'login'
+
+    # Enrutamiento básico
+    if url_path == 'login':
+        login_page()
+    elif url_path == 'clima':
+        clima_page()
+    else:
+        st.error('Página no encontrada.')
+
+
+# Función para la página de inicio de sesión
+def login_page():
     # Div contenedor para el formulario de inicio de sesión
     st.markdown('<div class="container login-container">', unsafe_allow_html=True)
 
@@ -62,11 +76,7 @@ def main():
     # Verificar si se ha iniciado sesión
     if st.button('Iniciar sesión'):
         if authenticate(username, password):
-            st.success('Inicio de sesión exitoso!')
-            # Cargar los modelos después de la autenticación
-            classification_model, regression_model = load_models()
-            # Pasar a la pantalla de predicción
-            predict_weather(classification_model, regression_model)
+            st.experimental_set_query_params(page='clima')
         else:
             st.error('Credenciales incorrectas. Por favor, inténtalo de nuevo.')
 
@@ -76,8 +86,11 @@ def main():
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-# Función para la pantalla de predicción del clima
-def predict_weather(classification_model, regression_model):
+# Función para la página de predicción del clima
+def clima_page():
+    # Cargar los modelos
+    classification_model, regression_model = load_models()
+
     # Sección de entrada de características para la predicción
     st.header('Entrada de características')
 
