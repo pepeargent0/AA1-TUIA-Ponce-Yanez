@@ -67,19 +67,12 @@ if __name__ == "__main__":
 import streamlit as st
 import joblib
 import pandas as pd
-import os
-
-# Obtener el directorio actual de trabajo
-path_dir = os.getcwd()
-
-# Rutas de los archivos de los modelos
-#weather_regression = os.path.join(path_dir, )
-#weather_classification = os.path.join(path_dir, 'weather_classification.joblib')
 
 
-pipeline_regresion = joblib.load('weather_regression.joblib')
-pipeline_clasificacion = joblib.load('weather_clasificacion.joblib')
-#pipeline_clasificacion = joblib.load('/Users/pepeargentoo/TP_AA1/weather_classification.joblib')
+
+
+pipeline_regresion = joblib.load('weather_regression.pkl')
+pipeline_clasificacion = joblib.load('weather_clasificacion.pkl')
 data = pd.read_csv('weatherAUS.csv')
 
 # Obtener las columnas esperadas por el modelo
