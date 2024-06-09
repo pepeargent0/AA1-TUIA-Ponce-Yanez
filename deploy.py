@@ -1,95 +1,16 @@
-import pandas as pd
+import joblib
 import numpy as np
-import tensorflow as tf
+import pandas as pd
+from keras.layers import Dense, Dropout
 from keras.models import Sequential
-from keras.layers import Dense
-from scikeras.wrappers import KerasClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.compose import ColumnTransformer
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from keras.optimizers import Adam
 from scikeras.wrappers import KerasRegressor
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score, log_loss, recall_score
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import RobustScaler
 
-
-class ModeloLluvia:
-    def __init__(self, file_path):
-        self.df = self._leer_dataset(file_path)
-        self.train = None
-        self.test = None
-        self.y_train_regresion = None
-        self.y_test_regresion = None
-        self.y_train_clasificacion = None
-        self.y_test_clasificacion = None
-        self.X_train = None
-        self.X_test = None
-
-    @staticmethod
-    def _leer_dataset(file_path):
-        df = pd.read_csv(file_path, sep=',')
-        return df
-
-    def _filtro_previo(self):
-        ciudades = ['Adelaide', 'Canberra', 'Cobar', 'Dartmoor', 'Melbourne', 'MelbourneAirport', 'MountGambier',
-                    'Sydney', 'SydneyAirport']
-        self.df = self.df[self.df['Location'].isin(ciudades)]
-        self.df['Date'] = pd.to_datetime(self.df['Date'])
-        self.df = self.df.sort_values(by='Date')
-
-    def _separar_test_train(self):
-        date_train_limit = pd.to_datetime('2015-10-06')
-        self.train = self.df[self.df['Date'] <= date_train_limit].copy()
-        self.test = self.df[self.df['Date'] > date_train_limit].copy()
-
-    def _limpieza_train(self):
-        self.train.drop(columns=['Unnamed: 0', 'Location'], inplace=True, axis=1)
-        self.train.sort_values(by='Date', inplace=True)
-        self.train.fillna(method='ffill', inplace=True)
-
-        self.train['PressureVariation'] = self.train['Pressure3pm'] - self.train['Pressure9am']
-        self.train['TempVariation'] = self.train['Temp3pm'] - self.train['Temp9am']
-        self.train['HumidityVariation'] = self.train['Humidity3pm'] - self.train['Humidity9am']
-        self.train['CloudVariation'] = self.train['Cloud3pm'] - self.train['Cloud9am']
-        self.train['WindSpeedVariation'] = self.train['WindSpeed3pm'] - self.train['WindSpeed9am']
-        self.train['RainToday'] = self.train['RainToday'].map({'No': 0, 'Yes': 1})
-        self.train['RainTomorrow'] = self.train['RainTomorrow'].map({'No': 0, 'Yes': 1})
-
-    def _limpieza_test(self):
-        self.test['RainToday'] = self.test['RainToday'].map({'No': 0, 'Yes': 1})
-        self.test['RainTomorrow'] = self.test['RainTomorrow'].map({'No': 0, 'Yes': 1})
-        self.test.sort_values(by='Date', inplace=True)
-
-        for column in self.test.columns:
-            self.test[column] = self.test[column].ffill()
-            self.test[column] = self.test[column].bfill()
-
-        self.test = self.test.drop(columns=['Unnamed: 0', 'Location', 'Date'], errors='ignore', axis=1)
-        self.test['PressureVariation'] = self.test['Pressure3pm'] - self.test['Pressure9am']
-        self.test['TempVariation'] = self.test['Temp3pm'] - self.test['Temp9am']
-        self.test['HumidityVariation'] = self.test['Humidity3pm'] - self.test['Humidity9am']
-        self.test['CloudVariation'] = self.test['Cloud3pm'] - self.test['Cloud9am']
-        self.test['WindSpeedVariation'] = self.test['WindSpeed3pm'] - self.test['WindSpeed9am']
-
-    def crear(self):
-        self._filtro_previo()
-        self._separar_test_train()
-        self._limpieza_train()
-        self._limpieza_test()
-        self.train = self.train.drop(columns=['Date']).copy()
-        columns_to_aggregate = ['Pressure9am', 'Pressure3pm', 'Temp9am', 'Temp3pm', 'Humidity9am',
-                                'Humidity3pm', 'Cloud9am', 'Cloud3pm', 'WindSpeed3pm', 'WindSpeed9am', 'WindGustDir',
-                                'WindDir9am', 'WindDir3pm']
-        self.train.drop(columns=columns_to_aggregate, inplace=True, axis=1)
-        self.test.drop(columns=columns_to_aggregate, inplace=True, axis=1)
-
-        self.X_train = self.train.drop(columns=['RainTomorrow', 'RainfallTomorrow'])
-        self.y_train_regresion = self.train['RainfallTomorrow']
-        self.X_test = self.test.drop(columns=['RainTomorrow', 'RainfallTomorrow'])
-        self.y_test_regresion = self.test['RainfallTomorrow']
-        self.y_train_clasificacion = self.train['RainTomorrow']
-        self.y_test_clasificacion = self.test['RainTomorrow']
-
-        return (self.y_train_regresion, self.y_test_regresion, self.y_train_clasificacion, self.y_test_clasificacion,
-                self.X_train, self.X_test)
 
 def show_metrics_regresion(y_true, y_pred, mensaje, verbose=True):
     mse = mean_squared_error(y_true, y_pred)
@@ -104,21 +25,185 @@ def show_metrics_regresion(y_true, y_pred, mensaje, verbose=True):
         print(f'R2: {r2:.4f}')
     return mse, rmse, mae, r2
 
-def create_model():
+
+def create_model_regresion(num_hidden_layers=5, hidden_layer_size=285, activation='relu',
+                           dropout_rate=0.002802855543727195, learning_rate=4.048487759836856e-05):
     model = Sequential()
-    model.add(Dense(32, input_shape=(12,), activation='relu'))
+    model.add(Dense(hidden_layer_size, input_shape=(X_train.shape[1],), activation=activation))
+    model.add(Dropout(dropout_rate))
+    for _ in range(num_hidden_layers - 1):
+        model.add(Dense(hidden_layer_size, activation=activation))
+        model.add(Dropout(dropout_rate))
     model.add(Dense(1, activation='linear'))
-    model.compile(optimizer='adam', loss='mean_squared_error')
+
+    optimizer = Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer, loss='mean_squared_error')
     return model
 
-modelo_lluvia = ModeloLluvia('weatherAUS.csv')
-(y_train_regresion, y_test_regresion, y_train_clasificacion, y_test_clasificacion, X_train,X_test)=modelo_lluvia.crear()
-keras_regressor = KerasRegressor(model=create_model, epochs=150, batch_size=16, verbose=0)
-pipeline = Pipeline(steps=[
+
+class DatasetReader:
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        df = pd.read_csv(self.file_path, sep=',')
+        ciudades = ['Adelaide', 'Canberra', 'Cobar', 'Dartmoor', 'Melbourne', 'MelbourneAirport', 'MountGambier',
+                    'Sydney', 'SydneyAirport']
+        df = df[df['Location'].isin(ciudades)]
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.sort_values(by='Date')
+        return df
+
+
+class TrainTestSplitter:
+    def __init__(self, date_train_limit):
+        self.date_train_limit = date_train_limit
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        train = X[X['Date'] <= self.date_train_limit].copy()
+        test = X[X['Date'] > self.date_train_limit].copy()
+        return train, test
+
+
+class TrainDataCleaner(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        self.columns_to_drop = ['Unnamed: 0', 'Location']
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # Copia del DataFrame original
+        X_cleaned = X.copy()
+
+        # Eliminar columnas no deseadas
+        X_cleaned.drop(columns=self.columns_to_drop, inplace=True)
+
+        # Ordenar por fecha
+        X_cleaned.sort_values(by='Date', inplace=True)
+
+        # Rellenar valores faltantes
+        X_cleaned.fillna(method='ffill', inplace=True)
+
+        # Calcular variaciones
+        X_cleaned['PressureVariation'] = X_cleaned['Pressure3pm'] - X_cleaned['Pressure9am']
+        X_cleaned['TempVariation'] = X_cleaned['Temp3pm'] - X_cleaned['Temp9am']
+        X_cleaned['HumidityVariation'] = X_cleaned['Humidity3pm'] - X_cleaned['Humidity9am']
+        X_cleaned['CloudVariation'] = X_cleaned['Cloud3pm'] - X_cleaned['Cloud9am']
+        X_cleaned['WindSpeedVariation'] = X_cleaned['WindSpeed3pm'] - X_cleaned['WindSpeed9am']
+
+        # Mapeo de valores 'RainToday' y 'RainTomorrow'
+        X_cleaned['RainToday'] = X_cleaned['RainToday'].map({'No': 0, 'Yes': 1})
+        X_cleaned['RainTomorrow'] = X_cleaned['RainTomorrow'].map({'No': 0, 'Yes': 1})
+        X_cleaned = X_cleaned.drop(columns=['Date']).copy()
+        columns_to_aggregate = ['Pressure9am', 'Pressure3pm', 'Temp9am', 'Temp3pm', 'Humidity9am',
+                                'Humidity3pm', 'Cloud9am', 'Cloud3pm', 'WindSpeed3pm', 'WindSpeed9am', 'WindGustDir',
+                                'WindDir9am', 'WindDir3pm']
+        X_cleaned.drop(columns=columns_to_aggregate, inplace=True, axis=1)
+
+        X_train = X_cleaned.drop(columns=['RainTomorrow', 'RainfallTomorrow'])
+        y_train_regresion = X_cleaned['RainfallTomorrow']
+        y_train_clasificacion = X_cleaned['RainTomorrow']
+        return y_train_regresion, y_train_clasificacion, X_train
+
+
+class TestDataCleaner(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        pass
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X_copy = X.copy()
+
+        # Mapeo de valores 'RainToday' y 'RainTomorrow'
+        X_copy['RainToday'] = X_copy['RainToday'].map({'No': 0, 'Yes': 1})
+        X_copy['RainTomorrow'] = X_copy['RainTomorrow'].map({'No': 0, 'Yes': 1})
+
+        for column in X_copy.columns:
+            X_copy[column] = X_copy[column].ffill()
+            X_copy[column] = X_copy[column].bfill()
+
+        # Eliminar columnas no deseadas
+        columns_to_drop = ['Unnamed: 0', 'Location', 'Date']
+        X_copy = X_copy.drop(columns=columns_to_drop, errors='ignore')
+
+        # Calcular variaciones
+        X_copy['PressureVariation'] = X_copy['Pressure3pm'] - X_copy['Pressure9am']
+        X_copy['TempVariation'] = X_copy['Temp3pm'] - X_copy['Temp9am']
+        X_copy['HumidityVariation'] = X_copy['Humidity3pm'] - X_copy['Humidity9am']
+        X_copy['CloudVariation'] = X_copy['Cloud3pm'] - X_copy['Cloud9am']
+        X_copy['WindSpeedVariation'] = X_copy['WindSpeed3pm'] - X_copy['WindSpeed9am']
+
+        columns_to_aggregate = ['Pressure9am', 'Pressure3pm', 'Temp9am', 'Temp3pm', 'Humidity9am',
+                                'Humidity3pm', 'Cloud9am', 'Cloud3pm', 'WindSpeed3pm', 'WindSpeed9am', 'WindGustDir',
+                                'WindDir9am', 'WindDir3pm']
+        X_copy.drop(columns=columns_to_aggregate, inplace=True, axis=1)
+        # Separar en X_test y y_test
+        X_test = X_copy.drop(columns=['RainTomorrow', 'RainfallTomorrow'])
+        y_test_regresion = X_copy['RainfallTomorrow']
+        y_test_clasificacion = X_copy['RainTomorrow']
+        return y_test_regresion, y_test_clasificacion, X_test
+
+
+pipeline_split = Pipeline([
+    ('dataset_reader', DatasetReader('weatherAUS.csv')),
+    ('train_test_splitter', TrainTestSplitter(pd.to_datetime('2015-10-06'))),
+])
+
+train, test = pipeline_split.fit_transform(None)
+
+pipeline_test = Pipeline([
+    ('test', TestDataCleaner()),
+])
+y_test_regresion, y_test_clasificacion, X_test = pipeline_test.fit_transform(test)
+
+pipeline_train = Pipeline([
+    ('train', TrainDataCleaner()),
+])
+y_train_regresion, y_train_clasificacion, X_train = pipeline_train.fit_transform(train)
+
+keras_regressor = KerasRegressor(build_fn=create_model_regresion, epochs=50, batch_size=16, verbose=1)
+pipeline_regression = Pipeline(steps=[
+    ('scaler', RobustScaler()),
     ('regressor', keras_regressor)
 ])
-pipeline.fit(X_train, y_train_regresion)
-y_pred_train = pipeline.predict(X_train)
-y_pred_test = pipeline.predict(X_test)
+pipeline_regression.fit(X_train, y_train_regresion)
+y_pred_train = pipeline_regression.predict(X_train)
+y_pred_test = pipeline_regression.predict(X_test)
 show_metrics_regresion(y_train_regresion, y_pred_train, "Métricas del conjunto de entrenamiento:", True)
 show_metrics_regresion(y_test_regresion, y_pred_test, "Métricas del conjunto de prueba:", True)
+joblib.dump(pipeline_regression, 'weather_regression.joblib')
+
+best_params = {'hidden_layer_sizes': (100,), 'activation': 'relu', 'solver': 'adam', 'alpha': 0.005958432842192192,
+               'learning_rate_init': 0.0001422171191037891}
+
+pipeline_clasificacion = Pipeline([
+    ('scaler', RobustScaler()),
+    ('mlp', MLPClassifier(**best_params, max_iter=200))
+])
+pipeline_clasificacion.fit(X_train, y_train_clasificacion)
+y_train_pred = pipeline_clasificacion.predict(X_train)
+train_accuracy = accuracy_score(y_train_clasificacion, y_train_pred)
+train_loss = log_loss(y_train_clasificacion, pipeline_clasificacion.predict_proba(X_train))
+train_recall = recall_score(y_train_clasificacion, y_train_pred, average='weighted')
+print("Precisión en el conjunto de entrenamiento:", train_accuracy)
+print("Pérdida en el conjunto de entrenamiento:", train_loss)
+print("Recall en el conjunto de entrenamiento:", train_recall)
+
+# Evaluar el modelo en el conjunto de prueba
+y_test_pred = pipeline_clasificacion.predict(X_test)
+test_accuracy = accuracy_score(y_test_clasificacion, y_test_pred)
+test_loss = log_loss(y_test_clasificacion, pipeline_clasificacion.predict_proba(X_test))
+test_recall = recall_score(y_test_clasificacion, y_test_pred, average='weighted')
+print("Precisión en el conjunto de prueba:", test_accuracy)
+print("Pérdida en el conjunto de prueba:", test_loss)
+print("Recall en el conjunto de prueba:", test_recall)
+joblib.dump(pipeline_clasificacion, 'weather_clasificacion.joblib')

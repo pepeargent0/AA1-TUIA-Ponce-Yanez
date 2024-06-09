@@ -1,7 +1,7 @@
 jupyter
-pandas
-numpy
-scikit-learn
+pandas~=1.5.3
+numpy~=1.24.2
+scikit-learn~=1.5.0
 seaborn
 matplotlib
 imblearn
@@ -9,6 +9,8 @@ scipy
 shap
 tensorflow
 optuna
-joblib
-scikeras
+joblib~=1.3.2
+scikeras~=0.12.0
 scikeras[tensorflow]
+keras~=2.12.0
+streamlit
