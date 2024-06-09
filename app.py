@@ -1,20 +1,36 @@
-"""import streamlit as st
+import streamlit as st
 import joblib
 import pandas as pd
 
-# Cargar los modelos guardados
-classification_model = joblib.load('weather_clasificacion.joblib')
-regression_model = joblib.load('weather_regression.joblib')
+
+# Función para verificar las credenciales
+def authenticate(username, password):
+    # Aquí deberías realizar la autenticación, por ejemplo, comparando con credenciales almacenadas
+    # En este ejemplo, solo se verifica que el usuario y la contraseña no estén vacíos
+    if username != "" and password != "":
+        return True
+    else:
+        return False
+
+
+# Función para cargar los modelos guardados
+def load_models():
+    classification_model = joblib.load('weather_clasificacion.joblib')
+    regression_model = joblib.load('weather_regression.joblib')
+    return classification_model, regression_model
+
 
 # Función para predecir si va a llover
-def predict_rain(features):
+def predict_rain(features, classification_model):
     prediction = classification_model.predict(features)
     return prediction[0]
 
+
 # Función para predecir la cantidad de lluvia
-def predict_rainfall(features):
+def predict_rainfall(features, regression_model):
     prediction = regression_model.predict(features)
     return prediction[0]
+
 
 # Función para mostrar los resultados
 def show_results(rain_prediction, rainfall_prediction):
@@ -22,11 +38,46 @@ def show_results(rain_prediction, rainfall_prediction):
     st.write(f'¿Va a llover? {"Sí" if rain_prediction else "No"}')
     st.write(f'Cantidad de lluvia: {rainfall_prediction:.2f} mm')
 
+
 # Función principal de la aplicación
 def main():
+    # Cargar el archivo CSS
+    st.markdown('<style>' + open('styles.css').read() + '</style>', unsafe_allow_html=True)
+
     # Título de la aplicación
     st.title('Predicción del clima')
 
+    # Div contenedor para el formulario de inicio de sesión
+    st.markdown('<div class="container login-container">', unsafe_allow_html=True)
+
+    # Card para el formulario de inicio de sesión
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-body">', unsafe_allow_html=True)
+
+    # Sección de inicio de sesión
+    st.header('Inicio de sesión')
+    username = st.text_input('Usuario')
+    password = st.text_input('Contraseña', type='password')
+
+    # Verificar si se ha iniciado sesión
+    if st.button('Iniciar sesión'):
+        if authenticate(username, password):
+            st.success('Inicio de sesión exitoso!')
+            # Cargar los modelos después de la autenticación
+            classification_model, regression_model = load_models()
+            # Pasar a la pantalla de predicción
+            predict_weather(classification_model, regression_model)
+        else:
+            st.error('Credenciales incorrectas. Por favor, inténtalo de nuevo.')
+
+    # Cerrar el card y el contenedor
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+# Función para la pantalla de predicción del clima
+def predict_weather(classification_model, regression_model):
     # Sección de entrada de características para la predicción
     st.header('Entrada de características')
 
@@ -56,53 +107,10 @@ def main():
 
     # Realizar las predicciones cuando se presiona el botón
     if st.button('Predecir'):
-        rain_prediction = predict_rain(features_df)
-        rainfall_prediction = predict_rainfall(features_df)
+        rain_prediction = predict_rain(features_df, classification_model)
+        rainfall_prediction = predict_rainfall(features_df, regression_model)
         show_results(rain_prediction, rainfall_prediction)
+
 
 if __name__ == "__main__":
     main()
-"""
-
-import streamlit as st
-import joblib
-import pandas as pd
-
-
-
-
-pipeline_regresion = joblib.load('weather_regression.pkl')
-pipeline_clasificacion = joblib.load('weather_clasificacion.pkl')
-data = pd.read_csv('weatherAUS.csv')
-
-# Obtener las columnas esperadas por el modelo
-columnas_esperadas = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine',
-       'WindGustSpeed', 'RainToday', 'PressureVariation', 'TempVariation',
-       'HumidityVariation', 'CloudVariation', 'WindSpeedVariation']
-
-# Sliders para las características
-sliders = {}
-for col in columnas_esperadas:
-    if col == 'RainToday':
-
-        sliders[col] = st.slider(col, int(data[col].min()), int(data[col].max()))
-    else:
-        sliders[col] = st.slider(col, float(data[col].min()), float(data[col].max()), float(data[col].mean()))
-
-# Crear un DataFrame con los valores para predecir
-data_para_predecir = pd.DataFrame([sliders])
-
-# Realizar la predicción de clasificación
-prediccion_clasificacion = pipeline_clasificacion.predict(data_para_predecir)
-
-# Realizar la predicción de regresión si clasificación indica que lloverá
-prediccion_regresion = None
-if prediccion_clasificacion[0] == 1:
-    prediccion_regresion = pipeline_regresion.predict(data_para_predecir)
-
-# Mostrar la predicción de clasificación
-st.write('Predicción Clasificación:', 'Lloverá' if prediccion_clasificacion[0] == 1 else 'No lloverá')
-
-# Mostrar la predicción de regresión si clasificación indica que lloverá
-if prediccion_clasificacion[0] == 1:
-    st.write(f'Predicción Regresión (cantidad de lluvia): {prediccion_regresion[0]} mm' if prediccion_regresion is not None else 'No disponible')
