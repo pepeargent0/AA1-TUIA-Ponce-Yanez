@@ -37,8 +37,8 @@ class ModeloLluvia:
 
     def _separar_test_train(self):
         date_train_limit = pd.to_datetime('2015-10-06')
-        self.train = self.df[self.df['Date'] <= date_train_limit]
-        self.test = self.df[self.df['Date'] > date_train_limit]
+        self.train = self.df[self.df['Date'] <= date_train_limit].copy()
+        self.test = self.df[self.df['Date'] > date_train_limit].copy()
 
     def _limpieza_train(self):
         self.train.drop(columns=['Unnamed: 0', 'Location'], inplace=True, axis=1)
@@ -74,7 +74,7 @@ class ModeloLluvia:
         self._separar_test_train()
         self._limpieza_train()
         self._limpieza_test()
-        self.train = self.train.drop(columns=['Date'])
+        self.train = self.train.drop(columns=['Date']).copy()
         columns_to_aggregate = ['Pressure9am', 'Pressure3pm', 'Temp9am', 'Temp3pm', 'Humidity9am',
                                 'Humidity3pm', 'Cloud9am', 'Cloud3pm', 'WindSpeed3pm', 'WindSpeed9am', 'WindGustDir',
                                 'WindDir9am', 'WindDir3pm']
@@ -91,22 +91,7 @@ class ModeloLluvia:
         return (self.y_train_regresion, self.y_test_regresion, self.y_train_clasificacion, self.y_test_clasificacion,
                 self.X_train, self.X_test)
 
-def create_model():
-    model = Sequential()
-    model.add(Dense(32, input_shape=(12,), activation='relu'))
-    model.add(Dense(1, activation='linear'))
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    return model
-
-# Crear el modelo de keras envuelto en KerasRegressor
-
-# Crear el objeto ModeloLluvia y generar los conjuntos de datos
-modelo_lluvia = ModeloLluvia('weatherAUS.csv')
-(y_train_regresion, y_test_regresion, y_train_clasificacion, y_test_clasificacion, X_train, X_test) = modelo_lluvia.crear()
-
 def show_metrics_regresion(y_true, y_pred, mensaje, verbose=True):
-    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-    import numpy as np
     mse = mean_squared_error(y_true, y_pred)
     rmse = np.sqrt(mse)
     mae = mean_absolute_error(y_true, y_pred)
@@ -119,17 +104,21 @@ def show_metrics_regresion(y_true, y_pred, mensaje, verbose=True):
         print(f'R2: {r2:.4f}')
     return mse, rmse, mae, r2
 
-keras_regressor = KerasRegressor(build_fn=create_model, epochs=50, batch_size=32, verbose=0)
-# Crear el pipeline completo
+def create_model():
+    model = Sequential()
+    model.add(Dense(32, input_shape=(12,), activation='relu'))
+    model.add(Dense(1, activation='linear'))
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    return model
+
+modelo_lluvia = ModeloLluvia('weatherAUS.csv')
+(y_train_regresion, y_test_regresion, y_train_clasificacion, y_test_clasificacion, X_train,X_test)=modelo_lluvia.crear()
+keras_regressor = KerasRegressor(model=create_model, epochs=150, batch_size=16, verbose=0)
 pipeline = Pipeline(steps=[
-    ('scaler', StandardScaler()),
     ('regressor', keras_regressor)
 ])
-# Entrenar el pipeline
 pipeline.fit(X_train, y_train_regresion)
-# Hacer predicciones
 y_pred_train = pipeline.predict(X_train)
 y_pred_test = pipeline.predict(X_test)
-# Mostrar métricas
-show_metrics_regresion(y_train_regresion, y_pred_train, "Métricas del conjunto de entrenamiento:", False)
-show_metrics_regresion(y_test_regresion, y_pred_test, "Métricas del conjunto de Prueba:", False)
+show_metrics_regresion(y_train_regresion, y_pred_train, "Métricas del conjunto de entrenamiento:", True)
+show_metrics_regresion(y_test_regresion, y_pred_test, "Métricas del conjunto de prueba:", True)
