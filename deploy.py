@@ -25,22 +25,6 @@ def show_metrics_regresion(y_true, y_pred, mensaje, verbose=True):
         print(f'R2: {r2:.4f}')
     return mse, rmse, mae, r2
 
-
-def create_model_regresion(num_hidden_layers=5, hidden_layer_size=285, activation='relu',
-                           dropout_rate=0.002802855543727195, learning_rate=4.048487759836856e-05):
-    model = Sequential()
-    model.add(Dense(hidden_layer_size, input_shape=(X_train.shape[1],), activation=activation))
-    model.add(Dropout(dropout_rate))
-    for _ in range(num_hidden_layers - 1):
-        model.add(Dense(hidden_layer_size, activation=activation))
-        model.add(Dropout(dropout_rate))
-    model.add(Dense(1, activation='linear'))
-
-    optimizer = Adam(learning_rate=learning_rate)
-    model.compile(optimizer=optimizer, loss='mean_squared_error')
-    return model
-
-
 class DatasetReader:
     def __init__(self, file_path):
         self.file_path = file_path
@@ -170,10 +154,18 @@ pipeline_train = Pipeline([
 ])
 y_train_regresion, y_train_clasificacion, X_train = pipeline_train.fit_transform(train)
 
-keras_regressor = KerasRegressor(build_fn=create_model_regresion, epochs=50, batch_size=16, verbose=1)
+
+
+
+modelo_regresion = Sequential([
+    Dense(32, input_shape=(12,), activation='relu'),
+    Dense(1, activation='linear')
+])
+modelo_regresion.compile(optimizer='adam', loss='mean_squared_error')
+
 pipeline_regression = Pipeline(steps=[
     ('scaler', RobustScaler()),
-    ('regressor', keras_regressor)
+    ('regressor', modelo_regresion)
 ])
 pipeline_regression.fit(X_train, y_train_regresion)
 y_pred_train = pipeline_regression.predict(X_train)
@@ -208,3 +200,6 @@ print("Pérdida en el conjunto de prueba:", test_loss)
 print("Recall en el conjunto de prueba:", test_recall)
 joblib.dump(pipeline_clasificacion, 'weather_clasificacion.joblib')
 print(X_train.columns)
+
+print("Columnas del conjunto de datos de prueba:")
+print(X_test.columns)

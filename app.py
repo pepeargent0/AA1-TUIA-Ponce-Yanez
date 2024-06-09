@@ -1,32 +1,9 @@
-import streamlit as st
+"""import streamlit as st
 import joblib
-import numpy as np
 import pandas as pd
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.optimizers import Adam
-from scikeras.wrappers import KerasRegressor
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import RobustScaler
-
-# Definir el modelo de regresión
-def create_model_regresion(num_hidden_layers=5, hidden_layer_size=285, activation='relu',
-                           dropout_rate=0.002802855543727195, learning_rate=4.048487759836856e-05):
-    model = Sequential()
-    model.add(Dense(hidden_layer_size, input_shape=(12,), activation=activation))
-    model.add(Dropout(dropout_rate))
-    for _ in range(num_hidden_layers - 1):
-        model.add(Dense(hidden_layer_size, activation=activation))
-        model.add(Dropout(dropout_rate))
-    model.add(Dense(1, activation='linear'))
-
-    optimizer = Adam(learning_rate=learning_rate)
-    model.compile(optimizer=optimizer, loss='mean_squared_error')
-    return model
 
 # Cargar los modelos guardados
 classification_model = joblib.load('weather_clasificacion.joblib')
-keras_regressor = KerasRegressor(build_fn=create_model_regresion, epochs=50, batch_size=16, verbose=1)
 regression_model = joblib.load('weather_regression.joblib')
 
 # Función para predecir si va a llover
@@ -39,42 +16,99 @@ def predict_rainfall(features):
     prediction = regression_model.predict(features)
     return prediction[0]
 
-# Título de la aplicación
-st.title('Predicción del clima')
-
-# Entrada de características para la predicción
-st.header('Entrada de características')
-
-# Ejemplo de características para predecir
-example_features = {
-    'MinTemp': 20.0,
-    'MaxTemp': 30.0,
-    'Rainfall': 5.0,
-    'Evaporation': 4.0,
-    'Sunshine': 8.0,
-    'WindGustSpeed': 40.0,
-    'PressureVariation': 5.0,
-    'TempVariation': 10.0,
-    'HumidityVariation': 30.0,
-    'CloudVariation': 3.0,
-    'WindSpeedVariation': 10.0,
-    'RainToday': 1
-}
-
-# Recopilar las características del usuario
-user_input = {}
-for feature_name, default_value in example_features.items():
-    user_input[feature_name] = st.number_input(f'{feature_name}', value=default_value)
-
-# Convertir las características en un DataFrame para la predicción
-features_df = pd.DataFrame([user_input])
-
-# Realizar las predicciones
-if st.button('Predecir'):
-    rain_prediction = predict_rain(features_df)
-    rainfall_prediction = predict_rainfall(features_df)
-
-    # Mostrar los resultados
+# Función para mostrar los resultados
+def show_results(rain_prediction, rainfall_prediction):
     st.header('Resultados')
     st.write(f'¿Va a llover? {"Sí" if rain_prediction else "No"}')
     st.write(f'Cantidad de lluvia: {rainfall_prediction:.2f} mm')
+
+# Función principal de la aplicación
+def main():
+    # Título de la aplicación
+    st.title('Predicción del clima')
+
+    # Sección de entrada de características para la predicción
+    st.header('Entrada de características')
+
+    # Ejemplo de características para predecir
+    example_features = {
+        'MinTemp': 20.0,
+        'MaxTemp': 30.0,
+        'Rainfall': 5.0,
+        'Evaporation': 4.0,
+        'Sunshine': 8.0,
+        'WindGustSpeed': 40.0,
+        'PressureVariation': 5.0,
+        'TempVariation': 10.0,
+        'HumidityVariation': 30.0,
+        'CloudVariation': 3.0,
+        'WindSpeedVariation': 10.0,
+        'RainToday': 1
+    }
+
+    # Recopilar las características del usuario
+    user_input = {}
+    for feature_name, default_value in example_features.items():
+        user_input[feature_name] = st.number_input(f'{feature_name}', value=default_value)
+
+    # Convertir las características en un DataFrame para la predicción
+    features_df = pd.DataFrame([user_input])
+
+    # Realizar las predicciones cuando se presiona el botón
+    if st.button('Predecir'):
+        rain_prediction = predict_rain(features_df)
+        rainfall_prediction = predict_rainfall(features_df)
+        show_results(rain_prediction, rainfall_prediction)
+
+if __name__ == "__main__":
+    main()
+"""
+
+import streamlit as st
+import joblib
+import pandas as pd
+import os
+
+# Obtener el directorio actual de trabajo
+path_dir = os.getcwd()
+
+# Rutas de los archivos de los modelos
+#weather_regression = os.path.join(path_dir, )
+#weather_classification = os.path.join(path_dir, 'weather_classification.joblib')
+
+
+pipeline_regresion = joblib.load('weather_regression.joblib')
+pipeline_clasificacion = joblib.load('weather_clasificacion.joblib')
+#pipeline_clasificacion = joblib.load('/Users/pepeargentoo/TP_AA1/weather_classification.joblib')
+data = pd.read_csv('weatherAUS.csv')
+
+# Obtener las columnas esperadas por el modelo
+columnas_esperadas = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine',
+       'WindGustSpeed', 'RainToday', 'PressureVariation', 'TempVariation',
+       'HumidityVariation', 'CloudVariation', 'WindSpeedVariation']
+
+# Sliders para las características
+sliders = {}
+for col in columnas_esperadas:
+    if col == 'RainToday':
+        sliders[col] = st.slider(col, int(data[col].min()), int(data[col].max()))
+    else:
+        sliders[col] = st.slider(col, float(data[col].min()), float(data[col].max()), float(data[col].mean()))
+
+# Crear un DataFrame con los valores para predecir
+data_para_predecir = pd.DataFrame([sliders])
+
+# Realizar la predicción de clasificación
+prediccion_clasificacion = pipeline_clasificacion.predict(data_para_predecir)
+
+# Realizar la predicción de regresión si clasificación indica que lloverá
+prediccion_regresion = None
+if prediccion_clasificacion[0] == 1:
+    prediccion_regresion = pipeline_regresion.predict(data_para_predecir)
+
+# Mostrar la predicción de clasificación
+st.write('Predicción Clasificación:', 'Lloverá' if prediccion_clasificacion[0] == 1 else 'No lloverá')
+
+# Mostrar la predicción de regresión si clasificación indica que lloverá
+if prediccion_clasificacion[0] == 1:
+    st.write(f'Predicción Regresión (cantidad de lluvia): {prediccion_regresion[0]} mm' if prediccion_regresion is not None else 'No disponible')
