@@ -9,3 +9,5 @@ scipy
 shap
 tensorflow
 optuna
+joblib
+scikeras
