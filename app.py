@@ -91,6 +91,7 @@ columnas_esperadas = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine
 sliders = {}
 for col in columnas_esperadas:
     if col == 'RainToday':
+
         sliders[col] = st.slider(col, int(data[col].min()), int(data[col].max()))
     else:
         sliders[col] = st.slider(col, float(data[col].min()), float(data[col].max()), float(data[col].mean()))
