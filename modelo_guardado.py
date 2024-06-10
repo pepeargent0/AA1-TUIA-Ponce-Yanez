@@ -8,18 +8,18 @@ loaded_pipeline = joblib.load('weather_clasificacion.joblib')
 
 # Crear un ejemplo de entrada para la predicción
 example_features = {
-    'MinTemp': 20.0,
-    'MaxTemp': 30.0,
-    'Rainfall': 5.0,
-    'Evaporation': 4.0,
-    'Sunshine': 8.0,
+    'MinTemp': 1.0,
+    'MaxTemp': 10.0,
+    'Rainfall': 1.0,
+    'Evaporation': 40.0,
+    'Sunshine': 0.0,
     'WindGustSpeed': 40.0,
-    'PressureVariation': 5.0,
-    'TempVariation': 10.0,
-    'HumidityVariation': 30.0,
+    'PressureVariation': 50.0,
+    'TempVariation': -10.0,
+    'HumidityVariation': 90.0,
     'CloudVariation': 3.0,
     'WindSpeedVariation': 10.0,
-    'RainToday': 1
+    'RainToday': 0
 }
 
 # Convertir las características en una matriz 2D para la predicción

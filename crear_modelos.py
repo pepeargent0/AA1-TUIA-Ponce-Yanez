@@ -135,7 +135,6 @@ y_pred_test = pipeline_regression.predict(X_test)
 show_metrics_regresion(y_train_regresion, y_pred_train, "Métricas del conjunto de entrenamiento:", True)
 show_metrics_regresion(y_test_regresion, y_pred_test, "Métricas del conjunto de prueba:", True)
 joblib.dump(pipeline_regression, 'weather_regression.pkl')
-
 best_params = {
     'hidden_layer_sizes': (100,),
     'activation': 'relu',
