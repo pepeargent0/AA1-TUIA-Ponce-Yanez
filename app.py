@@ -2,10 +2,7 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-
-# Función para verificar las credenciales
 def authenticate(username, password):
-    # Verificar credenciales
     if username == "admin" and password == "admin":
         return True
     else:
