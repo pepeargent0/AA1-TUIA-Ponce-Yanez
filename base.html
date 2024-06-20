@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>TallerExpress®</title>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
+          integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/style.css') }}"/>
+    <link rel="icon" href="{{ url_for('static', filename='te.png') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/flag-icon-css/css/flag-icon.min.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.carousel.min.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.theme.default.min.css') }}"/>
+    <link rel="icon" href="{{ url_for('static', filename='te.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='te.png') }}" type="image/png">
+</head>
+<body style="background-image: url( {{ url_for('static', filename='assets/images/imagefondo.jpg') }})">
+{% block content %}{% endblock %}
+<script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/vendors/chart.js/Chart.min.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.carousel.min.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/off-canvas.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/misc.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/settings.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/todolist.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/dashboard.js')}}"></script>
+</body>
+</html>

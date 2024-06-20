@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-scroller">
+ <div class="container-fluid page-body-wrapper full-page-wrapper">
+  <div class="row w-100 m-0">
+   <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+    <div class="card col-lg-4 mx-auto" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+     <div class="card-body px-5 py-5">
+      <center>
+       <img src="{{ url_for('static', filename='logo.png') }}" style="margin-bottom: 20px; margin-left: 10px; width: 100%;" alt="" />
+      </center>
+      {% if m %}
+      <div class="alert alert-danger" role="alert" style="font-size: 0.475em; line-height: 1.2; text-align: center;">
+       <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+        <p>{{ m }}</p>
+       </ul>
+      </div>
+      {% endif %}
+
+      <form method="post">
+       <div class="form-group">
+        <label>USUARIO</label>
+        <input type="text" class="form-control p_input" name="username" />
+       </div>
+       <div class="mb-3 form-password-toggle">
+        <div class="d-flex justify-content-between">
+         <label class="form-label" for="password">Contraseña</label>
+        </div>
+        <div class="input-group input-group-merge">
+         <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+         <span class="input-group-text cursor-pointer" id="password-toggle" style="background-color: transparent; border-right: 1px solid; border-bottom: 1px solid; border-top: 1px solid;"><i class="bx bx-hide"></i></span>
+        </div>
+       </div>
+       <br>
+       <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-block enter-btn" style="background-color: #a00000; border: none;">INGRESAR</button>
+       </div>
+      </form>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+<script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+<script>
+ document.getElementById("password-toggle").addEventListener("click", function () {
+  var passwordInput = document.getElementById("password");
+  if (passwordInput.type === "password") {
+   passwordInput.type = "text";
+   this.innerHTML = '<i class="bx bx-show"></i>';
+  } else {
+   passwordInput.type = "password";
+   this.innerHTML = '<i class="bx bx-hide"></i>';
+  }
+ });
+</script>
+<script src="{{ url_for('static', filename='assets/js/off-canvas.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/misc.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/settings.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/todolist.js')}}"></script>
+{% endblock %}
