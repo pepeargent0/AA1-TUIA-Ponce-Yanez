@@ -107,6 +107,7 @@ class TestDataCleaner(BaseEstimator, TransformerMixin):
         y_test_regresion = X_copy['RainfallTomorrow']
         y_test_clasificacion = X_copy['RainTomorrow']
         return y_test_regresion, y_test_clasificacion, X_test
+
 pipeline_split = Pipeline([
     ('dataset_reader', DatasetReader('weatherAUS.csv')),
     ('train_test_splitter', TrainTestSplitter(pd.to_datetime('2015-10-06'))),

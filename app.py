@@ -1,44 +1,69 @@
+import numpy as np
 import streamlit as st
 import joblib
 import pandas as pd
 
+
 def authenticate(username, password):
-    if username == "admin" and password == "admin":
-        return True
-    else:
-        return False
+    return username == "admin" and password == "admin"
 
 
 # Función para cargar los modelos guardados
 def load_models():
-    classification_model = joblib.load('weather_clasificacion.joblib')
-    regression_model = joblib.load('weather_regression.joblib')
-    return classification_model, regression_model
+    try:
+        classification_model = joblib.load('weather_clasificacion.joblib')
+        regression_model = joblib.load('weather_regression.joblib')
+        return classification_model, regression_model
+    except FileNotFoundError:
+        st.error(
+            "No se encontraron los archivos de los modelos. Asegúrate de que 'weather_clasificacion.joblib' y 'weather_regression.joblib' existan.")
+        return None, None
+    except Exception as e:
+        st.error(f"Error al cargar los modelos: {e}")
+        return None, None
 
 
 # Función para predecir si va a llover
 def predict_rain(features, classification_model):
-    prediction = classification_model.predict(features)
-    return prediction[0]
+    try:
+        prediction = classification_model.predict(features)
+        return prediction[0]
+    except Exception as e:
+        st.error(f"Error al realizar la predicción de clasificación: {e}")
+        return None
 
 
 # Función para predecir la cantidad de lluvia
 def predict_rainfall(features, regression_model):
-    prediction = regression_model.predict(features)
-    return prediction[0]
+    try:
+        prediction = regression_model.predict(features)
+        return prediction[0]
+    except Exception as e:
+        st.error(f"Error al realizar la predicción de regresión: {e}")
+        return None
 
 
 # Función para mostrar los resultados
 def show_results(rain_prediction, rainfall_prediction):
     st.header('Resultados')
-    st.write(f'¿Va a llover? {"Sí" if rain_prediction else "No"}')
-    st.write(f'Cantidad de lluvia: {rainfall_prediction:.2f} mm')
+    if rain_prediction is not None:
+        st.write(f'¿Va a llover? {"Sí" if rain_prediction else "No"}')
+    else:
+        st.write("No se pudo determinar si va a llover.")
+
+    if rainfall_prediction is not None:
+        st.write(f'Cantidad de lluvia: {rainfall_prediction:.2f} mm')
+    else:
+        st.write("No se pudo determinar la cantidad de lluvia.")
 
 
 # Función principal de la aplicación
 def main():
     # Cargar el archivo CSS
-    st.markdown('<style>' + open('styles.css').read() + '</style>', unsafe_allow_html=True)
+    try:
+        st.markdown('<style>' + open('styles.css').read() + '</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.error("Archivo CSS 'styles.css' no encontrado.")
 
     # Título de la aplicación
     st.title('Predicción del clima')
@@ -88,23 +113,27 @@ def clima_page():
     # Cargar los modelos
     classification_model, regression_model = load_models()
 
+    if classification_model is None or regression_model is None:
+        st.error("Error al cargar los modelos. No se pueden realizar predicciones.")
+        return
+
     # Sección de entrada de características para la predicción
     st.header('Entrada de características')
 
     # Ejemplo de características para predecir
     example_features = {
-        'MinTemp': 20.0,
-        'MaxTemp': 30.0,
-        'Rainfall': 5.0,
-        'Evaporation': 4.0,
-        'Sunshine': 8.0,
+        'MinTemp': 1.0,
+        'MaxTemp': 10.0,
+        'Rainfall': 1.0,
+        'Evaporation': 40.0,
+        'Sunshine': 0.0,
         'WindGustSpeed': 40.0,
-        'PressureVariation': 5.0,
-        'TempVariation': 10.0,
-        'HumidityVariation': 30.0,
+        'PressureVariation': 50.0,
+        'TempVariation': -10.0,
+        'HumidityVariation': 90.0,
         'CloudVariation': 3.0,
         'WindSpeedVariation': 10.0,
-        'RainToday': 1
+        'RainToday': 0
     }
 
     # Recopilar las características del usuario
@@ -114,6 +143,27 @@ def clima_page():
 
     # Convertir las características en un DataFrame para la predicción
     features_df = pd.DataFrame([user_input])
+
+    # Asegurarse de que las columnas están en el mismo orden que durante el entrenamiento
+    features_df = features_df[list(example_features.keys())]
+
+    # Imprimir las columnas del DataFrame y las esperadas por el modelo
+    st.write("Características de entrada:", features_df.columns.tolist())
+
+    # Obtener los nombres de las características esperadas por el modelo
+    expected_columns = classification_model.feature_names_in_
+
+    # Imprimir los nombres de las características esperadas por el modelo
+    st.write("Características esperadas por el modelo:", expected_columns.tolist())
+
+    # Verificar las diferencias entre las características
+    missing_features = set(expected_columns) - set(features_df.columns)
+    extra_features = set(features_df.columns) - set(expected_columns)
+
+    if missing_features:
+        st.write("Características faltantes:", list(missing_features))
+    if extra_features:
+        st.write("Características adicionales no esperadas:", list(extra_features))
 
     # Realizar las predicciones cuando se presiona el botón
     if st.button('Predecir'):
