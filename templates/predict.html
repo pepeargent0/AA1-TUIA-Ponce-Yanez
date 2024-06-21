@@ -49,10 +49,10 @@
               <span class="range-label">33.9</span>
             </div>
           </div>
-          <input type="range" class="form-range" id="MinTemp" name="MinTemp" min="-8.5" max="33.9" step="0.1" value="0" style="width: 100%;">
+          <input type="range" class="form-range" id="MinTemp" name="MinTemp" min="-8.5" max="33.9" step="0.1" value="19.7" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="MinTempValue">-8.5</span>
+          <span class="value-display" id="MinTempValue">19.7</span>
         </center>
       </div>
     </div>
@@ -68,10 +68,10 @@
               <span class="range-label" >48.1</span>
             </div>
           </div>
-          <input type="range" name="MaxTemp" class="form-range" id="MaxTemp" min="-4.8" max="48.1" step="0.1" value="0" style="width: 100%;">
+          <input type="range" name="MaxTemp" class="form-range" id="MaxTemp" min="-4.8" max="48.1" step="0.1" value="21.5" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="MaxTempValue">-4.8</span>
+          <span class="value-display" id="MaxTempValue">21.5</span>
         </center>
       </div>
     </div>
@@ -109,10 +109,10 @@
               <span class="range-label" >145.0</span>
             </div>
           </div>
-          <input type="range" name="Evaporation" class="form-range" id="Evaporation" min="0" max="145.0" step="0.5" value="0" style="width: 100%;">
+          <input type="range" name="Evaporation" class="form-range" id="Evaporation" min="0" max="145.0" step="0.1" value="13.2" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="EvaporationValue">0</span>
+          <span class="value-display" id="EvaporationValue">13.2</span>
         </center>
       </div>
     </div>
@@ -128,10 +128,10 @@
               <span class="range-label" >14.5</span>
             </div>
           </div>
-          <input type="range" name="Sunshine" class="form-range" id="Sunshine" min="0.0" max="14.5" step="0.1" value="0" style="width: 100%;">
+          <input type="range" name="Sunshine" class="form-range" id="Sunshine" min="0.0" max="14.5" step="0.1" value="1.3" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="SunshineValue">0</span>
+          <span class="value-display" id="SunshineValue">1.3</span>
         </center>
       </div>
     </div>
@@ -221,10 +221,89 @@
               <span class="range-label" >135.0</span>
             </div>
           </div>
-          <input type="range" class="form-range" name="WindGustSpeed" id="WindGustSpeed" min="6.0" max="135.0" step="1.0" value="0" style="width: 100%;">
+          <input type="range" class="form-range" name="WindGustSpeed" id="WindGustSpeed" min="6.0" max="135.0" step="1.0" value="67.0" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="WindGustSpeedValue">0</span>
+          <span class="value-display" id="WindGustSpeedValue">67.0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="WindSpeed9am">WindSpeed9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >130.0</span>
+            </div>
+          </div>
+          <input type="range" name="WindSpeed9am" class="form-range" id="WindSpeed9am" min="0.0" max="130.0" step="0.1" value="39.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="WindSpeed9amValue">39.0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="WindSpeed3pm">WindSpeed3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >87.0</span>
+            </div>
+          </div>
+          <input type="range" name="WindSpeed3pm" class="form-range" id="WindSpeed3pm" min="0.0" max="87.0" step="0.1" value="26.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="WindSpeed3pmValue">26.0</span>
+        </center>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Humidity9am">Humidity9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >100.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" name="Humidity9am" id="Humidity9am" min="0.0" max="100.0" step="0.1" value="61.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="Humidity9amValue">61.0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Humidity3pm">Humidity3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >100.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" name="Humidity3pm" id="Humidity3pm" min="0.0" max="100.0" step="0.1" value="56.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="Humidity3pmValue">56.0</span>
         </center>
       </div>
     </div>
@@ -240,13 +319,16 @@
               <span class="range-label" >1041</span>
             </div>
           </div>
-          <input type="range" class="form-range" name="Pressure9am" id="Pressure9am" min="980.5" max="1041" step="0.1" value="0" style="width: 100%;">
+          <input type="range" class="form-range" name="Pressure9am" id="Pressure9am" min="980.5" max="1041" step="0.1" value="1029.6" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="Pressure9amValue">980.5</span>
+          <span class="value-display" id="Pressure9amValue">1029.6</span>
         </center>
       </div>
     </div>
+  </div>
+
+  <div class="row" style="text-align: center;">
     <div class="col-md-4">
       <div class="form-group">
         <label for="Pressure3pm">Pressure3pm</label>
@@ -259,10 +341,48 @@
               <span class="range-label" >1039.6</span>
             </div>
           </div>
-          <input type="range" class="form-range" name="Pressure3pm" id="Pressure3pm" min="977.1" max="1039.6" step="0.1" value="0" style="width: 100%;">
+          <input type="range" class="form-range" name="Pressure3pm" id="Pressure3pm" min="977.1" max="1039.6" step="0.1" value="1033.6" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="Pressure3pmValue">977.1</span>
+          <span class="value-display" id="Pressure3pmValue">1033.6</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Cloud9am">Cloud9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >9.0</span>
+            </div>
+          </div>
+          <input type="range" name="Cloud9am" class="form-range" id="Cloud9am" min="0.0" max="9.0" step="0.1" value="5.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="Cloud9amValue">5.0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Cloud3pm">Cloud3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >9.0</span>
+            </div>
+          </div>
+          <input type="range" name="Cloud3pm" class="form-range" id="Cloud3pm" min="0.0" max="9.0" step="0.1" value="7.0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="Cloud3pmValue">7.0</span>
         </center>
       </div>
     </div>
@@ -281,10 +401,10 @@
               <span class="range-label" >40.2</span>
             </div>
           </div>
-          <input type="range" class="form-range" name="Temp9am" id="Temp9am" min="-7.2" max="40.2" step="0.1" value="0" style="width: 100%;">
+          <input type="range" class="form-range" name="Temp9am" id="Temp9am" min="-7.2" max="40.2" step="0.1" value="20.3" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="Temp9amValue">0</span>
+          <span class="value-display" id="Temp9amValue">20.3</span>
         </center>
       </div>
     </div>
@@ -300,130 +420,10 @@
               <span class="range-label" >46.7</span>
             </div>
           </div>
-          <input type="range" class="form-range" name="Temp3pm" id="Temp3pm" min="-5.4" max="46.7" step="0.1" value="0" style="width: 100%;">
+          <input type="range" class="form-range" name="Temp3pm" id="Temp3pm" min="-5.4" max="46.7" step="0.1" value="19.0" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="Temp3pmValue">0</span>
-        </center>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="Humidity9am">Humidity9am</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >100.0</span>
-            </div>
-          </div>
-          <input type="range" class="form-range" name="Humidity9am" id="Humidity9am" min="0.0" max="100.0" step="0.5" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="Humidity9amValue">0</span>
-        </center>
-      </div>
-    </div>
-  </div>
-
-  <div class="row" style="text-align: center;">
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="Humidity3pm">Humidity3pm</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >100.0</span>
-            </div>
-          </div>
-          <input type="range" class="form-range" name="Humidity3pm" id="Humidity3pm" min="0.0" max="100.0" step="0.5" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="Humidity3pmValue">0</span>
-        </center>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="Cloud9am">Cloud9am</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >9.0</span>
-            </div>
-          </div>
-          <input type="range" name="Cloud9am" class="form-range" id="Cloud9am" min="0.0" max="9.0" step="0.1" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="Cloud9amValue">0</span>
-        </center>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="Cloud3pm">Cloud3pm</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >9.0</span>
-            </div>
-          </div>
-          <input type="range" name="Cloud3pm" class="form-range" id="Cloud3pm" min="0.0" max="9.0" step="0.5" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="Cloud3pmValue">0</span>
-        </center>
-      </div>
-    </div>
-  </div>
-
-  <div class="row" style="text-align: center;">
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="WindSpeed9am">WindSpeed9am</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >130.0</span>
-            </div>
-          </div>
-          <input type="range" name="WindSpeed9am" class="form-range" id="WindSpeed9am" min="0.0" max="130.0" step="0.5" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="WindSpeed9amValue">0</span>
-        </center>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="form-group">
-        <label for="WindSpeed3pm">WindSpeed3pm</label>
-        <div class="range-container">
-          <div class="row">
-            <div class="col-md-6" style="text-align: left;">
-              <span class="range-label">0.0</span>
-            </div>
-            <div class="col-md-6" style="text-align: right;">
-              <span class="range-label" >87.0</span>
-            </div>
-          </div>
-          <input type="range" name="WindSpeed3pm" class="form-range" id="WindSpeed3pm" min="0.0" max="87.0" step="0.5" value="0" style="width: 100%;">
-        </div>
-        <center>
-          <span class="value-display" id="WindSpeed3pmValue">0</span>
+          <span class="value-display" id="Temp3pmValue">19.0</span>
         </center>
       </div>
     </div>

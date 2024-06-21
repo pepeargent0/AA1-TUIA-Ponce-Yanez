@@ -26,7 +26,7 @@ except Exception as e:
 
 
 def authenticate(username, password):
-    if username == "admin" and password == "admin":
+    if username == "tuia" and password == "tuia":
         session['logged_in'] = True
         return True
     return False
