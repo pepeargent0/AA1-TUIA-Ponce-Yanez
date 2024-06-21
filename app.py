@@ -3,8 +3,8 @@ import joblib
 import numpy as np
 
 # Cargar los modelos
-#modelo_cuanto_llueve = joblib.load('weather_regression.joblib')
-#modelo_si_llueve = joblib.load('weather_clasificacion.joblib')
+modelo_cuanto_llueve = joblib.load('weather_regression.joblib')
+modelo_si_llueve = joblib.load('weather_clasificacion.joblib')
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -26,7 +26,7 @@ def login():
             flash('Credenciales incorrectas. Por favor, inténtalo de nuevo.')
     return render_template('login.html')
 
-@app.route('/predict', methods=['GET', 'POST'])
+@app.route('/prediccion', methods=['GET', 'POST'])
 def predict():
     if request.method == 'POST':
         data = request.form
@@ -66,13 +66,11 @@ def predict():
         }
 
         features_array = np.array(list(data_transform.values())).reshape(1, -1)
-        #prediccion_llueve = modelo_si_llueve.predict(features_array)
-        prediccion_llueve = 1
+        prediccion_llueve = modelo_si_llueve.predict(features_array)
         if prediccion_llueve == 0:
             result = 'No llueve'
         else:
-            #predicted_rainfall = modelo_cuanto_llueve.predict(features_array)
-            predicted_rainfall = 0
+            predicted_rainfall = modelo_cuanto_llueve.predict(features_array)
             result = f'Llueve: {predicted_rainfall:.2f} mm'
 
         return render_template('predict.html', result=result)
