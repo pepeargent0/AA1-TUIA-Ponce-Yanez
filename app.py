@@ -12,13 +12,10 @@ app.secret_key = 'your_secret_key'
 # Función ficticia para la autenticación
 def authenticate(username, password):
     # Aquí puedes agregar la lógica de autenticación
-    return username == "admin" and password == "password"
+    return username == "admin" and password == "admin"
 
-@app.route('/')
-def home():
-    return 'pppp'
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
