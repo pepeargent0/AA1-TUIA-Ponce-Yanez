@@ -1,0 +1,113 @@
+{% extends "taller.html" %} {% block content %}
+<div class="col-md-12">
+ <h3 class="card-title" style="text-transform: uppercase; font-size: 1.6rem; color: white;">Empleado</h3>
+</div>
+{% if mensaje %}
+<div class="col-md-8 alert alert-danger" role="alert" style="font-size: 0.475em; line-height: 1.2; text-align: center;">
+ <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+  <p>{{mensaje}}</p>
+ </ul>
+</div>
+{% endif %}
+<br />
+<div class="col-12 grid-margin stretch-card">
+ <div class="card">
+  <div class="card-body" style="padding: 40px;">
+   <form class="forms-sample" method="POST" enctype="multipart/form-data">
+    <div class="row">
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="nombre">Nombre</label>
+       <input type="text" class="form-control" id="nombre" placeholder="Nombre" name="nombre" {% if empleado %} value="{{ empleado.nombre }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="apellido">Apellido</label>
+       <input type="text" class="form-control" id="apellido" placeholder="Apellido" name="apellido" {% if empleado %} value="{{ empleado.apellido }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="dni">DNI</label>
+       <input type="text" class="form-control" id="dni" placeholder="DNI" name="dni" {% if empleado %} value="{{ empleado.dni }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="email">Email</label>
+       <input type="email" class="form-control" id="email" placeholder="Email" name="email" {% if empleado %} value="{{ empleado.email }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="password">Clave</label>
+       <input type="password" class="form-control" id="password" placeholder="Clave " name="password" {% if not empleado %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-6">
+      <div class="form-group">
+       <label for="telefono">Telefono</label>
+       <input type="text" class="form-control" id="telefono" placeholder="Telefono" name="telefono" {% if empleado %} value="{{ empleado.telefono }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+    </div>
+    <div class="row">
+     <div class="col-md-12">
+      <div class="form-group">
+       <label for="direccion">Dirección</label>
+       <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion" {% if empleado %} value="{{ empleado.direccion }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+    </div>
+    <div class="row">
+     <div class="col-md-5">
+      <div class="form-group">
+       <label for="provincia">Provincia</label>
+       <input type="text" class="form-control" id="provincia" placeholder="Provincia" name="provincia" {% if empleado %} value="{{ empleado.provincia }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-5">
+      <div class="form-group">
+       <label for="ciudad">Ciudad</label>
+       <input type="text" class="form-control" id="ciudad" placeholder="Ciudad" name="ciudad" {% if empleado %} value="{{ empleado.ciudad }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+     <div class="col-md-2">
+      <div class="form-group">
+       <label for="codigo_postal">Codigo Postal</label>
+       <input type="text" class="form-control" id="codigo_postal" placeholder="Codigo Postal" name="codigo_postal" {% if empleado %} value="{{ empleado.codigo_postal }}" {% else %} required {% endif %} />
+      </div>
+     </div>
+    </div>
+    <br />
+    <div class="row">
+     <div class="col-md-6"></div>
+     <div class="col-md-3">
+      <input id="configuracion-form" type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 10px; background-color: #a00000; border-color: #a00000;" value="Confirmar" />
+     </div>
+     <div class="col-md-3">
+      <input type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 10px; background-color: black; border-color: black;" value="Cancelar" onclick="window.location.href ='/taller/gestion/vendedores'" />
+     </div>
+    </div>
+   </form>
+  </div>
+ </div>
+</div>
+<script>
+$(document).ready(function() {
+    $('#configuracion-form').on('submit', function(event) {
+        console.log('Formulario enviado');
+        // Desactiva el botón de confirmar después de hacer clic en él para evitar envíos duplicados
+        $('#confirmar-btn').prop('disabled', true);
+        // Asegúrate de que el formulario no se envíe inmediatamente después de desactivar el botón
+        // Esto es importante para que el botón quede deshabilitado antes de enviar el formulario
+        // Si se produce algún error al desactivar el botón, evita que el formulario se envíe
+        // y permite que el usuario intente nuevamente
+        event.preventDefault(); // Evita que se envíe el formulario
+        return true; // Continúa con el envío del formulario
+    });
+});
+
+</script>
+{% endblock %}
