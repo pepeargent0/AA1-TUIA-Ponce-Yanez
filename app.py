@@ -30,6 +30,7 @@ def login():
 def predict():
     if request.method == 'POST':
         data = request.form
+        print(data)
         example_features = {
             'MinTemp': float(data['MinTemp']),
             'MaxTemp': float(data['MaxTemp']),
@@ -67,11 +68,12 @@ def predict():
 
         features_array = np.array(list(data_transform.values())).reshape(1, -1)
         prediccion_llueve = modelo_si_llueve.predict(features_array)
+        print(prediccion_llueve)
         if prediccion_llueve == 0:
-            result = 'No llueve'
+            result = ('No', None)
         else:
             predicted_rainfall = modelo_cuanto_llueve.predict(features_array)
-            result = f'Llueve: {predicted_rainfall:.2f} mm'
+            result = ('Si, ', f'{predicted_rainfall[0][0]:.2f} mm')
 
         return render_template('predict.html', result=result)
     return render_template('predict.html')
