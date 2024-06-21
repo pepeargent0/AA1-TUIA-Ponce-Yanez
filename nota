@@ -1,0 +1,19 @@
+columnas Dir
+WindGustDir,WindDir9am,WindDir3pm:
+'W', 'WNW', 'WSW', 'NE', 'NNW', 'N', 'NNE', 'SW', nan, 'ENE',
+       'SSE', 'S', 'NW', 'SE', 'ESE', 'E', 'SSW'
+MinTemp: min -8.5 max: 33.9
+MaxTemp: max: 48.1, min:-4.8
+Rainfall: min: 0, max: 371.0
+Evaporation: max: 145.0, min: 0
+Sunshine: (0.0, 14.5)
+WindGustSpeed: (6.0, 135.0)
+WindSpeed9am: (0.0, 130.0)
+WindSpeed3pm: (0.0, 87.0)
+Humidity9am: (0.0, 100.0)
+Pressure3pm: (977.1, 1039.6)
+Cloud9am: (0.0, 9.0)
+Cloud3pm: (0.0, 9.0)
+Temp9am: (-7.2, 40.2)
+Temp3pm: (-5.4, 46.7)
+RainToday: < select> Si, NO value 1, 0
