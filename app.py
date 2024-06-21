@@ -3,8 +3,8 @@ import joblib
 import numpy as np
 
 # Cargar los modelos
-modelo_cuanto_llueve = joblib.load('weather_regression.joblib')
-modelo_si_llueve = joblib.load('weather_clasificacion.joblib')
+modelo_cuanto_llueve = joblib.load('weather_regression.pkl')
+modelo_si_llueve = joblib.load('weather_clasificacion.pkl')
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'

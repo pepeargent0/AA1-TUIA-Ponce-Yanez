@@ -1,9 +1,24 @@
 {% extends "taller.html" %}
 
 {% block title %}Predicción del clima{% endblock %}
-
+<style>
+  .form-group {
+    margin: 20px;
+  }
+  .range-container {
+    display: flex;
+    align-items: center;
+  }
+  .range-label {
+    margin: 0 10px;
+  }
+  .value-display {
+    margin-left: 10px;
+    font-weight: bold;
+  }
+</style>
 {% block content %}
-<h1 class="mt-5">Predicción del clima</h1>
+<h1 class="mt-5" style="color: #ffae00;">Predicción del clima</h1>
 {% if result %}
   <div class="alert alert-info mt-3">
     {{ result }}
@@ -13,8 +28,17 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <label for="MinTemp">Temperatura Mínima</label>
-        <input type="number" step="any" class="form-control" id="MinTemp" name="MinTemp" required>
+        <label for="rangeInput">Select a value:</label>
+        <div class="range-container">
+          <span class="range-label">0</span>
+          <input type="range" class="form-range" id="rangeInput" min="0" max="5" step="0.5" value="0">
+          <span class="range-label">5</span>
+          
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+
+        </center>
       </div>
     </div>
     <div class="col-md-6">
@@ -139,6 +163,14 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary">Predecir</button>
+  <button type="submit" style="background-color: #ffae00; border-color: #ffae00;" class="btn btn-primary">Predecir</button>
 </form>
+<script>
+  const rangeInput = document.getElementById('rangeInput');
+  const rangeValue = document.getElementById('rangeValue');
+
+  rangeInput.addEventListener('input', () => {
+    rangeValue.textContent = rangeInput.value;
+  });
+</script>
 {% endblock %}
