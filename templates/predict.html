@@ -1,4 +1,4 @@
-{% extends "taller.html" %}
+{% extends "clima.html" %}
 
 {% block title %}Predicción del clima{% endblock %}
 <style>
@@ -18,152 +18,432 @@
   }
 </style>
 {% block content %}
-<h1 class="mt-5" style="color: #ffae00;">Predicción del clima</h1>
+<h1 class="mt-5" style="color: #ffae00;">Predicción de lluvia en Australia</h1>
 {% if result %}
   <div class="alert alert-info mt-3">
     {{ result }}
   </div>
 {% endif %}
 <form method="post">
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="rangeInput">Select a value:</label>
+        <label for="locationSelect">Location</label>
+        <select class="form-control" id="locationSelect" style="background-color: grey;">
+          <option value="Adelaide">Adelaide</option>
+          <option value="Canberra">Canberra</option>
+          <option value="Cobar">Cobar</option>
+          <option value="Dartmoor">Dartmoor</option>
+          <option value="Melbourne">Melbourne</option>
+          <option value="MelbourneAirport">Melbourne Airport</option>
+          <option value="MountGambier">Mount Gambier</option>
+          <option value="Sydney">Sydney</option>
+          <option value="SydneyAirport">Sydney Airport</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="rangeInput" >MinTemp</label>
         <div class="range-container">
-          <span class="range-label">0</span>
-          <input type="range" class="form-range" id="rangeInput" min="0" max="5" step="0.5" value="0">
-          <span class="range-label">5</span>
-          
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">-8.5</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label">33.9</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="-8.5" max="33.9" step="0.1" value="0" style="width: 100%;">
         </div>
         <center>
-          <span class="value-display" id="rangeValue">0</span>
-
+          <span class="value-display" id="rangeValue">-8.5</span>
         </center>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="MaxTemp">Temperatura Máxima</label>
-        <input type="number" step="any" class="form-control" id="MaxTemp" name="MaxTemp" required>
+        <label for="MaxTemp">MaxTemp</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">-4.8</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >48.1</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="-4.8" max="48.1" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">-4.8</span>
+        </center>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="Rainfall">Precipitación</label>
-        <input type="number" step="any" class="form-control" id="Rainfall" name="Rainfall" required>
+        <label for="Rainfall">Rainfall</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >371.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0" max="371.0" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="Evaporation">Evaporación</label>
-        <input type="number" step="any" class="form-control" id="Evaporation" name="Evaporation" required>
+        <label for="Evaporation">Evaporation</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >145.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0" max="145.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="Sunshine">Horas de sol</label>
-        <input type="number" step="any" class="form-control" id="Sunshine" name="Sunshine" required>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="WindGustSpeed">Velocidad de ráfaga de viento</label>
-        <input type="number" step="any" class="form-control" id="WindGustSpeed" name="WindGustSpeed" required>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Pressure9am">Presión a las 9 AM</label>
-        <input type="number" step="any" class="form-control" id="Pressure9am" name="Pressure9am" required>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Pressure3pm">Presión a las 3 PM</label>
-        <input type="number" step="any" class="form-control" id="Pressure3pm" name="Pressure3pm" required>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Temp9am">Temperatura a las 9 AM</label>
-        <input type="number" step="any" class="form-control" id="Temp9am" name="Temp9am" required>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Temp3pm">Temperatura a las 3 PM</label>
-        <input type="number" step="any" class="form-control" id="Temp3pm" name="Temp3pm" required>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Humidity9am">Humedad a las 9 AM</label>
-        <input type="number" step="any" class="form-control" id="Humidity9am" name="Humidity9am" required>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="Humidity3pm">Humedad a las 3 PM</label>
-        <input type="number" step="any" class="form-control" id="Humidity3pm" name="Humidity3pm" required>
+        <label for="Sunshine">Sunshine</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >14.5</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="14.5" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="Cloud9am">Nubosidad a las 9 AM</label>
-        <input type="number" step="any" class="form-control" id="Cloud9am" name="Cloud9am" required>
+        <label for="windGustDirSelect">WindGustDir</label>
+        <select class="form-control" id="windGustDirSelect" style="background-color: grey;">
+          <option value="W">W</option>
+          <option value="WNW">WNW</option>
+          <option value="WSW">WSW</option>
+          <option value="NE">NE</option>
+          <option value="NNW">NNW</option>
+          <option value="N">N</option>
+          <option value="NNE">NNE</option>
+          <option value="SW">SW</option>
+          <option value="ENE">ENE</option>
+          <option value="SSE">SSE</option>
+          <option value="S">S</option>
+          <option value="NW">NW</option>
+          <option value="SE">SE</option>
+          <option value="ESE">ESE</option>
+          <option value="E">E</option>
+          <option value="SSW">SSW</option>
+        </select>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="Cloud3pm">Nubosidad a las 3 PM</label>
-        <input type="number" step="any" class="form-control" id="Cloud3pm" name="Cloud3pm" required>
+        <label for="windDir9amSelect">WindDir9am</label>
+        <select class="form-control" id="windDir9amSelect" style="background-color: grey;">
+          <option value="W">W</option>
+          <option value="WNW">WNW</option>
+          <option value="WSW">WSW</option>
+          <option value="NE">NE</option>
+          <option value="NNW">NNW</option>
+          <option value="N">N</option>
+          <option value="NNE">NNE</option>
+          <option value="SW">SW</option>
+          <option value="ENE">ENE</option>
+          <option value="SSE">SSE</option>
+          <option value="S">S</option>
+          <option value="NW">NW</option>
+          <option value="SE">SE</option>
+          <option value="ESE">ESE</option>
+          <option value="E">E</option>
+          <option value="SSW">SSW</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="windDir3pmSelect">WindDir3pm</label>
+        <select class="form-control" id="windDir3pmSelect" style="background-color: grey;">
+          <option value="W">W</option>
+          <option value="WNW">WNW</option>
+          <option value="WSW">WSW</option>
+          <option value="NE">NE</option>
+          <option value="NNW">NNW</option>
+          <option value="N">N</option>
+          <option value="NNE">NNE</option>
+          <option value="SW">SW</option>
+          <option value="ENE">ENE</option>
+          <option value="SSE">SSE</option>
+          <option value="S">S</option>
+          <option value="NW">NW</option>
+          <option value="SE">SE</option>
+          <option value="ESE">ESE</option>
+          <option value="E">E</option>
+          <option value="SSW">SSW</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="WindGustSpeed">WindGustSpeed</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">6.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >135.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="6.0" max="135.0" step="1.0" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Pressure9am">Pressure9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">980.5</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >1041</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="980.5" max="1041" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">980.5</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Pressure3pm">Pressure3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">977.1</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >1039.6</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="977.1" max="1039.6" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">977.1</span>
+        </center>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="WindSpeed9am">Velocidad del viento a las 9 AM</label>
-        <input type="number" step="any" class="form-control" id="WindSpeed9am" name="WindSpeed9am" required>
+        <label for="Temp9am">Temp9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">-7.2</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >40.2</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="-7.2" max="40.2" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="WindSpeed3pm">Velocidad del viento a las 3 PM</label>
-        <input type="number" step="any" class="form-control" id="WindSpeed3pm" name="WindSpeed3pm" required>
+        <label for="Temp3pm">Temp3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">-5.4</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >46.7</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="-5.4" max="46.7" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Humidity9am">Humidity9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >100.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="100.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
       <div class="form-group">
-        <label for="RainToday">Lluvia hoy</label>
-        <input type="number" step="any" class="form-control" id="RainToday" name="RainToday" required>
+        <label for="Humidity3pm">Humidity3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >100.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="100.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Cloud9am">Cloud9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >9.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="9.0" step="0.1" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="Cloud3pm">Cloud3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >9.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="9.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
       </div>
     </div>
   </div>
 
-  <button type="submit" style="background-color: #ffae00; border-color: #ffae00;" class="btn btn-primary">Predecir</button>
+  <div class="row" style="text-align: center;">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="WindSpeed9am">WindSpeed9am</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >130.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="130.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="WindSpeed3pm">WindSpeed3pm</label>
+        <div class="range-container">
+          <div class="row">
+            <div class="col-md-6" style="text-align: left;">
+              <span class="range-label">0.0</span>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <span class="range-label" >87.0</span>
+            </div>
+          </div>
+          <input type="range" class="form-range" id="rangeInput" min="0.0" max="87.0" step="0.5" value="0" style="width: 100%;">
+        </div>
+        <center>
+          <span class="value-display" id="rangeValue">0</span>
+        </center>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="RainToday">RainToday</label>
+        <select class="form-control" id="RainToday" style="background-color: gray;">
+          <option value="Yes">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" style="background-color: #ffae00; border-color: #ffae00; width: 20%; text-align: center;" class="btn btn-primary">Predecir</button>
 </form>
 <script>
   const rangeInput = document.getElementById('rangeInput');
