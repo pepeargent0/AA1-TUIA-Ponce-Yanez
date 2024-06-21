@@ -1,5 +1,4 @@
 {% extends "clima.html" %}
-
 {% block title %}Predicción del clima{% endblock %}
 <style>
   .form-group {
@@ -20,7 +19,7 @@
 {% block content %}
 <h1 class="mt-5" style="color: #ffae00;">Predicción de lluvia en Australia</h1>
 
-<form method="post">
+<form id="weatherForm">
   <div class="row" style="text-align: center;">
     <div class="col-md-4">
       <div class="form-group">
@@ -451,17 +450,26 @@
       font-weight: bold;" class="btn btn-primary">Predecir</button>
     </div>
     <div class="col-md-8">
-      {% if result %}
-  <div class="alert alert-info mt-3" style="    font-weight: bold;
-  text-transform: uppercase;
-  text-align: center;">
-    ¿ES PROBABLE QUE LLUEVA? {{ result[0] }} {{ result[1] }} 
-  </div>
-{% endif %}
+      <div id="result" class="alert alert-info mt-3" style="display:none; font-weight: bold; text-transform: uppercase; text-align: center;">
+      </div>
     </div>
   </div>
 </form>
 <script>
+  $(document).ready(function() {
+    $('#weatherForm').on('submit', function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: "/prediccion",
+        method: "POST",
+        data: $(this).serialize(),
+        success: function (response) {
+          $('#result').html("¿ES PROBABLE QUE LLUEVA? " + response['result']);
+          $('#result').show();
+        }
+      });
+    });
+  });
   const MinTempInput = document.getElementById('MinTemp');
   const MinTempValue = document.getElementById('MinTempValue');
   MinTempInput.addEventListener('input', () => {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import joblib
 import numpy as np
 
@@ -30,7 +30,6 @@ def login():
 def predict():
     if request.method == 'POST':
         data = request.form
-        print(data)
         example_features = {
             'MinTemp': float(data['MinTemp']),
             'MaxTemp': float(data['MaxTemp']),
@@ -68,14 +67,12 @@ def predict():
 
         features_array = np.array(list(data_transform.values())).reshape(1, -1)
         prediccion_llueve = modelo_si_llueve.predict(features_array)
-        print(prediccion_llueve)
         if prediccion_llueve == 0:
-            result = ('No', None)
+            result = 'No'
         else:
             predicted_rainfall = modelo_cuanto_llueve.predict(features_array)
-            result = ('Si, ', f'{predicted_rainfall[0][0]:.2f} mm')
-
-        return render_template('predict.html', result=result)
+            result = f'Si, {predicted_rainfall[0][0]:.2f} mm'
+        return jsonify(result=result)
     return render_template('predict.html')
 
 if __name__ == '__main__':
