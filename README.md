@@ -48,3 +48,6 @@ Ejecución de la Aplicación con Flask
 Para una mejor interfaz gráfica y funcionalidades avanzadas, ejecuta la aplicación con Flask:
 
     python app_flask.py
+    
+    Usuario: tuia
+    Contraseña: tuia
