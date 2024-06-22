@@ -95,23 +95,23 @@ if modelo_cuanto_llueve and modelo_si_llueve:
         Rainfall = st.slider('Rainfall', min_value=0.0, max_value=371.0, value=0.0, step=0.1)
         Evaporation = st.slider('Evaporation', min_value=0.0, max_value=145.0, value=13.2, step=0.1)
         Sunshine = st.slider('Sunshine', min_value=0.0, max_value=14.5, value=1.3, step=0.1)
-        WindGustSpeed = st.slider('WindGustSpeed', min_value=6.0, max_value=135.0, value=67.0, step=1.0)
-        Pressure9am = st.slider('Pressure9am', min_value=980.5, max_value=1041.0, value=1029.6, step=0.1)
-        Pressure3pm = st.slider('Pressure3pm', min_value=977.1, max_value=1039.6, value=1033.6, step=0.1)
-        Temp9am = st.slider('Temp9am', min_value=-7.2, max_value=40.2, value=20.3, step=0.1)
-        Temp3pm = st.slider('Temp3pm', min_value=-5.4, max_value=46.7, value=19.0, step=0.1)
-        Humidity9am = st.slider('Humidity9am', min_value=0.0, max_value=100.0, value=61.0, step=0.1)
-        Humidity3pm = st.slider('Humidity3pm', min_value=0.0, max_value=100.0, value=56.0, step=0.1)
-        Cloud9am = st.slider('Cloud9am', min_value=0.0, max_value=9.0, value=5.0, step=0.1)
-        Cloud3pm = st.slider('Cloud3pm', min_value=0.0, max_value=9.0, value=7.0, step=0.1)
-        WindSpeed9am = st.slider('WindSpeed9am', min_value=0.0, max_value=130.0, value=39.0, step=0.1)
-        WindSpeed3pm = st.slider('WindSpeed3pm', min_value=0.0, max_value=87.0, value=26.0, step=0.1)
-        RainToday = st.selectbox('RainToday', ['No', 'Sí'])
-        RainToday = 1 if RainToday == 'Sí' else 0
         WindGustDir = st.selectbox('WindGustDir', ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'])
         WindDir9am = st.selectbox('WindDir9am', ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'])
         WindDir3pm = st.selectbox('WindDir3pm', ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'])
-
+        WindGustSpeed = st.slider('WindGustSpeed', min_value=6.0, max_value=135.0, value=67.0, step=1.0)
+        WindSpeed9am = st.slider('WindSpeed9am', min_value=0.0, max_value=130.0, value=39.0, step=0.1)
+        WindSpeed3pm = st.slider('WindSpeed3pm', min_value=0.0, max_value=87.0, value=26.0, step=0.1)
+        Humidity9am = st.slider('Humidity9am', min_value=0.0, max_value=100.0, value=61.0, step=0.1)
+        Humidity3pm = st.slider('Humidity3pm', min_value=0.0, max_value=100.0, value=56.0, step=0.1)
+        Pressure9am = st.slider('Pressure9am', min_value=980.5, max_value=1041.0, value=1029.6, step=0.1)
+        Pressure3pm = st.slider('Pressure3pm', min_value=977.1, max_value=1039.6, value=1033.6, step=0.1)
+        Cloud9am = st.slider('Cloud9am', min_value=0.0, max_value=9.0, value=5.0, step=0.1)
+        Cloud3pm = st.slider('Cloud3pm', min_value=0.0, max_value=9.0, value=7.0, step=0.1)
+        Temp9am = st.slider('Temp9am', min_value=-7.2, max_value=40.2, value=20.3, step=0.1)
+        Temp3pm = st.slider('Temp3pm', min_value=-5.4, max_value=46.7, value=19.0, step=0.1)
+        RainToday = st.selectbox('RainToday', ['No', 'Sí'])
+        RainToday = 1 if RainToday == 'Sí' else 0
+       
         submit_button = st.form_submit_button(label='Predecir')
 
     if submit_button:
